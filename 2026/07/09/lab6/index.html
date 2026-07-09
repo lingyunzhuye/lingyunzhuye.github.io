@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="实验六：Linux环境配置 1. 实验目的本次实验旨在：（1） 使用命令进行Linux系统的基础操作；（2） 了解和简单管理常用系统配置文件（&#x2F;etc&#x2F;passed、 &#x2F;etc&#x2F;group、 &#x2F;etc&#x2F;profile等）；（3） 了解和简单管理用户配置文件（ ~&#x2F;.bashrc、 ~&#x2F;.profile等）（4） 掌握环境变量的查看、设置与管理方法。  2. 实验环境 操作系统：Ubuntu Ser">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实验六">
+<meta property="og:url" content="http://example.com/2026/07/09/lab6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="实验六：Linux环境配置 1. 实验目的本次实验旨在：（1） 使用命令进行Linux系统的基础操作；（2） 了解和简单管理常用系统配置文件（&#x2F;etc&#x2F;passed、 &#x2F;etc&#x2F;group、 &#x2F;etc&#x2F;profile等）；（3） 了解和简单管理用户配置文件（ ~&#x2F;.bashrc、 ~&#x2F;.profile等）（4） 掌握环境变量的查看、设置与管理方法。  2. 实验环境 操作系统：Ubuntu Ser">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-1-1.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-2-1.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-3-1.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-3-2.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-3-3.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-4-1.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-4-2.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-4-3.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-4-4.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-5-1.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-5-2.png">
+<meta property="og:image" content="http://example.com/2026/07/09/lab6/6-5-3.png">
+<meta property="article:published_time" content="2026-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-09T06:04:06.962Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2026/07/09/lab6/6-1-1.png">
+
+<link rel="canonical" href="http://example.com/2026/07/09/lab6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>实验六 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/09/lab6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实验六
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-07-09 00:00:00 / Modified: 14:04:06" itemprop="dateCreated datePublished" datetime="2026-07-09T00:00:00+08:00">2026-07-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="实验六：Linux环境配置"><a href="#实验六：Linux环境配置" class="headerlink" title="实验六：Linux环境配置"></a>实验六：Linux环境配置</h1><hr>
+<h2 id="1-实验目的"><a href="#1-实验目的" class="headerlink" title="1. 实验目的"></a>1. 实验目的</h2><p>本次实验旨在：<br><strong>（1）</strong> 使用命令进行Linux系统的基础操作；<br><strong>（2）</strong> 了解和简单管理常用系统配置文件（<code>/etc/passed</code>、 <code>/etc/group</code>、 <code>/etc/profile</code>等）；<br><strong>（3）</strong> 了解和简单管理用户配置文件（ <code>~/.bashrc</code>、 <code>~/.profile</code>等）<br><strong>（4）</strong> 掌握环境变量的查看、设置与管理方法。</p>
+<hr>
+<h2 id="2-实验环境"><a href="#2-实验环境" class="headerlink" title="2. 实验环境"></a>2. 实验环境</h2><ul>
+<li>操作系统：Ubuntu Server 22.04 LTS （在VirsualBox虚拟机中）</li>
+</ul>
+<hr>
+<h2 id="3-实验过程"><a href="#3-实验过程" class="headerlink" title="3. 实验过程"></a>3. 实验过程</h2><h3 id="步骤一：登录与查看系统信息"><a href="#步骤一：登录与查看系统信息" class="headerlink" title="步骤一：登录与查看系统信息"></a>步骤一：登录与查看系统信息</h3><blockquote>
+<p>whoami              # 查看当前用户<br>uname -a            # 查看内核与架构信息<br>lsb_release -a      # 查看Ubuntu版本<br>hostname            # 查看主机名<br>pwd                 # 查看当前工作目录</p>
+</blockquote>
+<img src="/2026/07/09/lab6/6-1-1.png" class="">
+
+<hr>
+<h3 id="步骤二：文件与目录的基本操作"><a href="#步骤二：文件与目录的基本操作" class="headerlink" title="步骤二：文件与目录的基本操作"></a>步骤二：文件与目录的基本操作</h3><blockquote>
+<p>ls -lh              # 列出文件（详细信息，易读大小）<br>cd ~                # 切换到主目录<br>mkdir test_dir      # 创建目录<br>touch test.txt      # 创建空文件<br>cp test.txt test_copy.txt   # 复制文件<br>mv test.txt &#x2F;tmp&#x2F;    # 移动文件<br>rm -f test.txt       # 删除文件</p>
+</blockquote>
+<img src="/2026/07/09/lab6/6-2-1.png" class="">
+
+<hr>
+<h3 id="步骤三：查看系统资源状态"><a href="#步骤三：查看系统资源状态" class="headerlink" title="步骤三：查看系统资源状态"></a>步骤三：查看系统资源状态</h3><blockquote>
+<p>free -h             # 查看内存使用<br>df -h               # 查看磁盘使用<br>top                 # 查看进程和资源占用（按q退出）<br>du -sh *            # 查看当前目录下各子目录的大小</p>
+</blockquote>
+<img src="/2026/07/09/lab6/6-3-1.png" class="">
+<img src="/2026/07/09/lab6/6-3-2.png" class="">
+<img src="/2026/07/09/lab6/6-3-3.png" class="">
+
+<hr>
+<h3 id="步骤四：查看用户与组配置文件"><a href="#步骤四：查看用户与组配置文件" class="headerlink" title="步骤四：查看用户与组配置文件"></a>步骤四：查看用户与组配置文件</h3><blockquote>
+<p>cat &#x2F;etc&#x2F;passwd          # 用户账户信息<br>sudo cat &#x2F;etc&#x2F;shadow     # 加密密码信息（仅root可读）<br>cat &#x2F;etc&#x2F;group           # 用户组信息<br>id                       # 查看当前用户ID信息</p>
+</blockquote>
+<img src="/2026/07/09/lab6/6-4-1.png" class="">
+<img src="/2026/07/09/lab6/6-4-2.png" class="">
+<img src="/2026/07/09/lab6/6-4-3.png" class="">
+<img src="/2026/07/09/lab6/6-4-4.png" class="">
+
+<hr>
+<h3 id="步骤五：创建和管理用户"><a href="#步骤五：创建和管理用户" class="headerlink" title="步骤五：创建和管理用户"></a>步骤五：创建和管理用户</h3><blockquote>
+<p>sudo adduser testuser              # 创建新用户<br>sudo passwd testuser               # 设置密码<br>sudo usermod -aG sudo testuser     # 赋予sudo权限<br>groups testuser                    # 查看用户所属组<br>su - testuser                      # 切换用户<br>sudo deluser -r testuser            # 删除用户</p>
+</blockquote>
+<img src="/2026/07/09/lab6/6-5-1.png" class="">
+<img src="/2026/07/09/lab6/6-5-2.png" class="">
+<img src="/2026/07/09/lab6/6-5-3.png" class="">
+
+<hr>
+<h3 id="步骤六：文件权限管理"><a href="#步骤六：文件权限管理" class="headerlink" title="步骤六：文件权限管理"></a>步骤六：文件权限管理</h3><h4 id="权限数字对照表"><a href="#权限数字对照表" class="headerlink" title="权限数字对照表"></a>权限数字对照表</h4><table>
+<thead>
+<tr>
+<th>数字</th>
+<th>权限</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>rwx</td>
+<td>读 + 写 + 执行</td>
+</tr>
+<tr>
+<td>6</td>
+<td>rw-</td>
+<td>读 + 写</td>
+</tr>
+<tr>
+<td>5</td>
+<td>r-x</td>
+<td>读 + 执行</td>
+</tr>
+<tr>
+<td>4</td>
+<td>r–</td>
+<td>只读</td>
+</tr>
+<tr>
+<td>0</td>
+<td>—</td>
+<td>无权限</td>
+</tr>
+</tbody></table>
+<h4 id="Linux-权限修改命令"><a href="#Linux-权限修改命令" class="headerlink" title="Linux 权限修改命令"></a>Linux 权限修改命令</h4><blockquote>
+<p>chmod 755 test.txt              # 数字法修改权限<br>chmod u+x test.txt              # 符号法：所有者增加执行权限<br>chmod g-w test.txt              # 符号法：去掉组的写权限<br>sudo chown root:root test.txt   # 修改所有者和组<br>sudo chgrp www-data test.txt    # 仅修改所属组</p>
+</blockquote>
+<hr>
+<h3 id="步骤七：查看环境变量"><a href="#步骤七：查看环境变量" class="headerlink" title="步骤七：查看环境变量"></a>步骤七：查看环境变量</h3><blockquote>
+<figure class="highlight plaintext"><figcaption><span># 查看所有环境变量</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">```echo $PATH```           # 查看PATH变量</span><br><span class="line">```echo $HOME```           # 查看主目录</span><br><span class="line">```echo $USER```           # 查看当前用户名</span><br><span class="line"></span><br><span class="line">&#123;% asset_img 6-7-1.png  %&#125;</span><br><span class="line">&#123;% asset_img 6-7-2.png  %&#125;</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### 步骤八：临时设置环境变量</span><br><span class="line"></span><br><span class="line">```export PATH=$PATH:/home/dev/mybin```     # 临时添加PATH</span><br><span class="line">```export MY_VAR=&quot;Hello World&quot;```           # 临时创建变量</span><br><span class="line">```echo $MY_VAR```                          # 验证</span><br><span class="line">```unset MY_VAR```                          # 删除变量</span><br><span class="line"></span><br><span class="line">&#123;% asset_img 6-8-1.png  %&#125;</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### 步骤九：永久设置环境变量（用户级）</span><br><span class="line"></span><br><span class="line">| 配置文件 | 加载时机 | 作用范围 |</span><br><span class="line">| ---- | ---- | ---- |</span><br><span class="line">| `~/.bashrc` | 每次打开新终端时执行 | 当前用户 |</span><br><span class="line">| `~/.profile` | 用户登录时执行一次 | 当前用户 |</span><br><span class="line">| `~/.bash_profile` | 用户登录时执行（优先于 `.profile`） | 当前用户 |</span><br><span class="line"></span><br><span class="line">#### 编辑 `~/.bashrc`</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">nano ~/.bashrc</span><br><span class="line"># 在末尾添加</span><br><span class="line">export PATH=$PATH:/home/dev/mybin</span><br><span class="line">export MY_CUSTOM_VAR=&quot;自定义变量&quot;</span><br><span class="line">alias ll=&#x27;ls -alF&#x27;</span><br><span class="line">#保存后生效</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure></blockquote>
+<hr>
+<h3 id="步骤十：永久设置环境变量（系统级）"><a href="#步骤十：永久设置环境变量（系统级）" class="headerlink" title="步骤十：永久设置环境变量（系统级）"></a>步骤十：永久设置环境变量（系统级）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/profile.d/myenv.sh</span><br><span class="line"># 添加</span><br><span class="line">export MY_GLOBAL_VAR=&quot;全局变量&quot;</span><br><span class="line">source /etc/profile.d/myenv.sh</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-实验结果"><a href="#4-实验结果" class="headerlink" title="4. 实验结果"></a>4. 实验结果</h2><p><strong>已用图片形式展示在每个步骤结尾</strong></p>
+<hr>
+<h2 id="5-知识总结"><a href="#5-知识总结" class="headerlink" title="5. 知识总结"></a>5. 知识总结</h2><p>Linux 环境配置是指根据系统需求，对用户环境、文件权限、软件运行环境、系统参数等进行调整，使系统能够稳定运行并满足开发、部署需求。</p>
+<p>Linux 环境配置主要涉及：</p>
+<ul>
+<li>文件系统与权限管理</li>
+<li>用户与权限控制</li>
+<li>Shell 环境配置</li>
+<li>环境变量管理</li>
+<li>软件安装与路径配置</li>
+<li>网络环境配置</li>
+<li>系统服务管理</li>
+</ul>
+<p>Linux 采用树状文件系统结构，所有文件都从根目录 <code>/</code> 开始。</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/</code></td>
+<td>Linux 文件系统根目录</td>
+</tr>
+<tr>
+<td><code>/home</code></td>
+<td>普通用户家目录</td>
+</tr>
+<tr>
+<td><code>/root</code></td>
+<td>root 用户主目录</td>
+</tr>
+<tr>
+<td><code>/etc</code></td>
+<td>系统配置文件目录</td>
+</tr>
+<tr>
+<td><code>/bin</code></td>
+<td>基础系统命令</td>
+</tr>
+<tr>
+<td><code>/usr</code></td>
+<td>用户程序和软件安装目录</td>
+</tr>
+<tr>
+<td><code>/var</code></td>
+<td>日志、缓存等动态数据</td>
+</tr>
+<tr>
+<td><code>/tmp</code></td>
+<td>临时文件目录</td>
+</tr>
+<tr>
+<td><code>/opt</code></td>
+<td>第三方软件安装目录</td>
+</tr>
+</tbody></table>
+<hr>
+<p>Linux 是一个多用户操作系统，通过权限机制保证系统安全。</p>
+<h4 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h4><table>
+<thead>
+<tr>
+<th>用户类型</th>
+<th>特点</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>root 用户</td>
+<td>最高权限用户</td>
+<td>系统管理</td>
+</tr>
+<tr>
+<td>普通用户</td>
+<td>权限受限</td>
+<td>日常使用</td>
+</tr>
+<tr>
+<td>系统用户</td>
+<td>服务运行账号</td>
+<td>运行后台服务</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="文件权限模型"><a href="#文件权限模型" class="headerlink" title="文件权限模型"></a>文件权限模型</h4><p>Linux 文件权限由三部分组成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">所有者(User)</span><br><span class="line">      |</span><br><span class="line">用户组(Group)</span><br><span class="line">      |</span><br><span class="line">其他用户(Other)</span><br></pre></td></tr></table></figure>
+
+<p>权限类型：</p>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>符号</th>
+<th>对文件作用</th>
+<th>对目录作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读</td>
+<td>r</td>
+<td>查看文件内容</td>
+<td>查看目录文件列表</td>
+</tr>
+<tr>
+<td>写</td>
+<td>w</td>
+<td>修改文件内容</td>
+<td>创建、删除文件</td>
+</tr>
+<tr>
+<td>执行</td>
+<td>x</td>
+<td>运行程序</td>
+<td>进入目录</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="权限数字表示"><a href="#权限数字表示" class="headerlink" title="权限数字表示"></a>权限数字表示</h4><p>Linux 使用八进制数字表示权限：</p>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>二进制</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>111</td>
+<td>rwx</td>
+</tr>
+<tr>
+<td>6</td>
+<td>110</td>
+<td>rw-</td>
+</tr>
+<tr>
+<td>5</td>
+<td>101</td>
+<td>r-x</td>
+</tr>
+<tr>
+<td>4</td>
+<td>100</td>
+<td>r–</td>
+</tr>
+<tr>
+<td>0</td>
+<td>000</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">755</span><br></pre></td></tr></table></figure>
+
+<p>表示：</p>
+<table>
+<thead>
+<tr>
+<th>用户</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件所有者</td>
+<td>rwx</td>
+</tr>
+<tr>
+<td>用户组</td>
+<td>r-x</td>
+</tr>
+<tr>
+<td>其他用户</td>
+<td>r-x</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="Linux-权限管理命令"><a href="#Linux-权限管理命令" class="headerlink" title="Linux 权限管理命令"></a>Linux 权限管理命令</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chmod</td>
+<td>修改文件权限</td>
+</tr>
+<tr>
+<td>chown</td>
+<td>修改文件所有者</td>
+</tr>
+<tr>
+<td>chgrp</td>
+<td>修改文件所属组</td>
+</tr>
+<tr>
+<td>sudo</td>
+<td>使用管理员权限执行命令</td>
+</tr>
+<tr>
+<td>su</td>
+<td>切换用户</td>
+</tr>
+</tbody></table>
+<p>常见操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 755 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>修改文件权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> user:group file</span><br></pre></td></tr></table></figure>
+
+<p>修改文件所有者。</p>
+<hr>
+<h4 id="环境变量概念"><a href="#环境变量概念" class="headerlink" title="环境变量概念"></a>环境变量概念</h4><p>环境变量是 Linux 中用于保存系统运行参数的变量。</p>
+<p>主要作用：</p>
+<ul>
+<li>指定程序搜索路径</li>
+<li>保存用户信息</li>
+<li>配置软件运行环境</li>
+</ul>
+<h4 id="常见环境变量"><a href="#常见环境变量" class="headerlink" title="常见环境变量"></a>常见环境变量</h4><table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PATH</td>
+<td>命令搜索路径</td>
+</tr>
+<tr>
+<td>HOME</td>
+<td>用户主目录</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>当前用户名</td>
+</tr>
+<tr>
+<td>SHELL</td>
+<td>当前Shell类型</td>
+</tr>
+<tr>
+<td>LANG</td>
+<td>系统语言环境</td>
+</tr>
+<tr>
+<td>JAVA_HOME</td>
+<td>Java安装路径</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="PATH变量原理"><a href="#PATH变量原理" class="headerlink" title="PATH变量原理"></a>PATH变量原理</h4><p>当输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python</span><br></pre></td></tr></table></figure>
+
+<p>系统会在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PATH指定的目录</span><br></pre></td></tr></table></figure>
+
+<p>中寻找对应程序。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin</span><br><span class="line">/usr/local/bin</span><br><span class="line">/home/user/bin</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="环境变量配置方式"><a href="#环境变量配置方式" class="headerlink" title="环境变量配置方式"></a>环境变量配置方式</h4><p>环境变量根据生命周期分为：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>生命周期</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>临时变量</td>
+<td>当前终端</td>
+<td>测试</td>
+</tr>
+<tr>
+<td>用户级变量</td>
+<td>当前用户永久有效</td>
+<td>个人开发环境</td>
+</tr>
+<tr>
+<td>系统级变量</td>
+<td>所有用户有效</td>
+<td>服务器配置</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="用户级配置文件"><a href="#用户级配置文件" class="headerlink" title="用户级配置文件"></a>用户级配置文件</h4><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>加载时机</th>
+<th>作用范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>~&#x2F;.bashrc</td>
+<td>每次打开终端</td>
+<td>当前用户</td>
+</tr>
+<tr>
+<td>~&#x2F;.profile</td>
+<td>用户登录</td>
+<td>当前用户</td>
+</tr>
+<tr>
+<td>~&#x2F;.bash_profile</td>
+<td>登录优先加载</td>
+<td>当前用户</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="系统级配置文件"><a href="#系统级配置文件" class="headerlink" title="系统级配置文件"></a>系统级配置文件</h4><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;etc&#x2F;profile</td>
+<td>全局环境配置</td>
+</tr>
+<tr>
+<td>&#x2F;etc&#x2F;environment</td>
+<td>系统环境变量</td>
+</tr>
+<tr>
+<td>&#x2F;etc&#x2F;profile.d&#x2F;*.sh</td>
+<td>模块化环境配置</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-出现问题及解决方案"><a href="#6-出现问题及解决方案" class="headerlink" title="6. 出现问题及解决方案"></a>6. 出现问题及解决方案</h2><table>
+<thead>
+<tr>
+<th>问题现象</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sudo: command not found</code></td>
+<td>用户不在 sudo 组中</td>
+<td>以 root 用户登录或切换到 root</td>
+</tr>
+<tr>
+<td><code>Permission denied</code></td>
+<td>权限不足</td>
+<td>使用 <code>sudo</code> 提权</td>
+</tr>
+<tr>
+<td>修改 <code>~/.bashrc</code> 后不生效</td>
+<td>未执行 <code>source</code></td>
+<td>执行 <code>source ~/.bashrc</code></td>
+</tr>
+<tr>
+<td>修改 <code>/etc/environment</code> 后不生效</td>
+<td>需要重启</td>
+<td>重启系统</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="7-心得体会"><a href="#7-心得体会" class="headerlink" title="7. 心得体会"></a>7. 心得体会</h2><p>通过本次 Linux 环境配置学习，我掌握了：</p>
+<ol>
+<li>Linux 文件权限管理方法；</li>
+<li>chmod、chown、chgrp 等常用命令；</li>
+<li>环境变量查看与设置方法；</li>
+<li>用户级和系统级环境变量配置；</li>
+<li>Linux 权限问题的排查方法。</li>
+</ol>
+<p>这些知识是 Linux 系统管理和服务器开发的重要基础。</p>
+<p>在后续学习中，我还需要继续深入学习：</p>
+<ul>
+<li>Linux 用户管理；</li>
+<li>Shell 脚本编程；</li>
+<li>服务管理；</li>
+<li>Linux 系统优化。</li>
+</ul>
+<p>通过不断实践，提高 Linux 系统管理和开发能力。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/07/09/lab8/" rel="prev" title="实验八">
+      <i class="fa fa-chevron-left"></i> 实验八
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/07/09/lab7/" rel="next" title="实验七">
+      实验七 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%85%AD%EF%BC%9ALinux%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">实验六：Linux环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="nav-number">1.1.</span> <span class="nav-text">1. 实验目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">2. 实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">3. 实验过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80%EF%BC%9A%E7%99%BB%E5%BD%95%E4%B8%8E%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="nav-number">1.3.1.</span> <span class="nav-text">步骤一：登录与查看系统信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8C%EF%BC%9A%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.2.</span> <span class="nav-text">步骤二：文件与目录的基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%89%EF%BC%9A%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">步骤三：查看系统资源状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E5%9B%9B%EF%BC%9A%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E4%B8%8E%E7%BB%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.4.</span> <span class="nav-text">步骤四：查看用户与组配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%94%EF%BC%9A%E5%88%9B%E5%BB%BA%E5%92%8C%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="nav-number">1.3.5.</span> <span class="nav-text">步骤五：创建和管理用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E5%85%AD%EF%BC%9A%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">1.3.6.</span> <span class="nav-text">步骤六：文件权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E6%95%B0%E5%AD%97%E5%AF%B9%E7%85%A7%E8%A1%A8"><span class="nav-number">1.3.6.1.</span> <span class="nav-text">权限数字对照表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-%E6%9D%83%E9%99%90%E4%BF%AE%E6%94%B9%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.6.2.</span> <span class="nav-text">Linux 权限修改命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%83%EF%BC%9A%E6%9F%A5%E7%9C%8B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.7.</span> <span class="nav-text">步骤七：查看环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E5%8D%81%EF%BC%9A%E6%B0%B8%E4%B9%85%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%88%E7%B3%BB%E7%BB%9F%E7%BA%A7%EF%BC%89"><span class="nav-number">1.3.8.</span> <span class="nav-text">步骤十：永久设置环境变量（系统级）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.4.</span> <span class="nav-text">4. 实验结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">5. 知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.5.1.</span> <span class="nav-text">用户类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.5.2.</span> <span class="nav-text">文件权限模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E6%95%B0%E5%AD%97%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.5.3.</span> <span class="nav-text">权限数字表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.5.4.</span> <span class="nav-text">Linux 权限管理命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%A6%82%E5%BF%B5"><span class="nav-number">1.5.5.</span> <span class="nav-text">环境变量概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.5.6.</span> <span class="nav-text">常见环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PATH%E5%8F%98%E9%87%8F%E5%8E%9F%E7%90%86"><span class="nav-number">1.5.7.</span> <span class="nav-text">PATH变量原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F"><span class="nav-number">1.5.8.</span> <span class="nav-text">环境变量配置方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.9.</span> <span class="nav-text">用户级配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.10.</span> <span class="nav-text">系统级配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.6.</span> <span class="nav-text">6. 出现问题及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%BF%83%E5%BE%97%E4%BD%93%E4%BC%9A"><span class="nav-number">1.7.</span> <span class="nav-text">7. 心得体会</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
